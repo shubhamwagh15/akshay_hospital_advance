@@ -1,0 +1,776 @@
+/* Global CSS for Hospital Website */
+
+/* Reset & base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+
+.btn-primary {
+  background: #28a745;
+}
+
+.btn-primary:hover {
+  background: #1e7e34;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Grids */
+.grid {
+  display: grid;
+  gap: 30px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Dashboard Styles */
+.dashboard-box {
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-box.active {
+  border-color: #007bff;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,123,255,0.3);
+}
+
+.dashboard-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Queue and Appointment Cards */
+.queue-list-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.appointment-card {
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.5rem;
+  background: #f8f9fa;
+}
+
+.queue-card {
+  border: 2px solid #e9ecef;
+  border-radius: 15px;
+  padding: 1.5rem;
+  background: white;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table th,
+table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+  word-wrap: break-word;
+}
+
+table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+}
+
+table tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Responsive table wrapper */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Status Badges */
+.status-badge {
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.emergency-badge {
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.availability-status {
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+/* Queue Statistics */
+.queue-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.stat-box {
+  text-align: center;
+  padding: 1rem;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-top: 0.5rem;
+}
+
+/* Testimonials Styles */
+.testimonials-section {
+  padding: 5rem 0;
+  background: #f8f9fa;
+}
+
+.testimonials-title {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.testimonials-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+}
+
+.testimonial-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* Navbar Responsive Styles */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Responsive Design */
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* Medium screens (992px to 1199px) */
+@media (max-width: 1199px) {
+  .container {
+    max-width: 960px;
+  }
+  
+  .grid-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small laptops (768px to 991px) */
+@media (max-width: 991px) {
+  .container {
+    max-width: 720px;
+  }
+  
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .testimonials-title {
+    font-size: 2.2rem;
+  }
+  
+  .dashboard-box {
+    padding: 20px;
+  }
+  
+  .stat-box {
+    padding: 0.8rem;
+  }
+  
+  .stat-number {
+    font-size: 1.8rem;
+  }
+}
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .grid {
+    gap: 20px;
+  }
+  
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  /* Navbar */
+  .nav-toggle {
+    display: block;
+  }
+  
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px 0;
+    z-index: 1000;
+    display: none;
+  }
+  
+  .nav-menu.active {
+    display: flex;
+  }
+  
+  .nav-menu li {
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  /* Dashboard */
+  .dashboard-box {
+    padding: 1rem;
+  }
+  
+  .dashboard-box h3 {
+    font-size: 1.1rem;
+  }
+  
+  .dashboard-box p {
+    font-size: 0.9rem;
+  }
+  
+  /* Tables */
+  .table-wrapper {
+    margin: 0 -15px;
+    padding: 0 15px;
+  }
+  
+  table {
+    font-size: 14px;
+  }
+  
+  table th,
+  table td {
+    padding: 8px 6px;
+  }
+  
+  /* Cards */
+  .card {
+    padding: 20px;
+  }
+  
+  /* Queue list items */
+  .queue-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .queue-item-number {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Queue stats */
+  .queue-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .stat-box {
+    padding: 0.8rem;
+  }
+  
+  .stat-number {
+    font-size: 1.6rem;
+  }
+  
+  /* Forms */
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  /* Modal */
+  .modal-content {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  /* Testimonials */
+  .testimonials-title {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .testimonials-subtitle {
+    font-size: 1rem;
+  }
+  
+  .testimonial-card {
+    padding: 1.8rem;
+    margin: 0 1rem;
+  }
+  
+  .testimonial-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  /* Hospital and Doctor intro */
+  .hospital-intro-content,
+  .doctors-intro-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+    min-height: auto;
+  }
+  
+  .hospital-title,
+  .doctors-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .hospital-desc,
+  .doctors-desc {
+    text-align: left;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Mobile phones (480px and below) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+  
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Typography */
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.3rem;
+  }
+  
+  /* Dashboard */
+  .dashboard-box {
+    padding: 0.8rem;
+  }
+  
+  .dashboard-box h3 {
+    font-size: 1rem;
+  }
+  
+  .dashboard-box p {
+    font-size: 0.8rem;
+  }
+  
+  /* Queue stats */
+  .queue-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  /* Tables */
+  table {
+    font-size: 12px;
+  }
+  
+  table th,
+  table td {
+    padding: 6px 4px;
+  }
+  
+  /* Cards */
+  .card {
+    padding: 15px;
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  /* Modal */
+  .modal-content {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  /* Queue list items */
+  .queue-list-item {
+    padding: 0.8rem;
+  }
+  
+  /* Forms */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  /* Testimonials */
+  .testimonials-title {
+    font-size: 1.8rem;
+  }
+  
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+  
+  .testimonial-text {
+    font-size: 0.95rem;
+  }
+  
+  /* Hospital intro */
+  .hospital-title,
+  .doctors-title {
+    font-size: 1.8rem;
+  }
+  
+  .hospital-desc,
+  .doctors-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}
+
+/* Very small screens (360px and below) */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 8px;
+  }
+  
+  .card {
+    padding: 12px;
+  }
+  
+  .dashboard-box {
+    padding: 0.6rem;
+  }
+  
+  table {
+    font-size: 11px;
+  }
+  
+  .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .modal-content {
+    padding: 0.8rem;
+    margin: 0.3rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 8px;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .modal-content {
+    max-height: 85vh;
+  }
+  
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Print styles */
+@media print {
+  .modal-overlay,
+  .nav-menu,
+  .btn,
+  .dashboard-box {
+    display: none !important;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  body {
+    background: white;
+  }
+  
+  table {
+    page-break-inside: avoid;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .card {
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+  }
+}
+
+/* Focus and accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+  }
+  
+  .card {
+    background: #2d2d2d;
+    border: 1px solid #444;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border-color: #555;
+  }
+  
+  table th {
+    background-color: #333;
+    color: #e0e0e0;
+  }
+  
+  .modal-content {
+    background: #2d2d2d;
+  }
+}
