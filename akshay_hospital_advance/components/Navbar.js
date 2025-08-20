@@ -1,173 +1,320 @@
+// components/Navbar.js
 'use client'
-import { useState } from 'react'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Handle responsive behavior
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768
+      setIsMobile(mobile)
+      
+      // Close mobile menu when switching to desktop
+      if (!mobile) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    handleResize() // Initial check
+    window.addEventListener('resize', handleResize)
+    
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (isMenuOpen && !event.target.closest('.navbar-container')) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('click', handleOutsideClick)
+    return () => document.removeEventListener('click', handleOutsideClick)
+  }, [isMenuOpen])
+
+  const closeMenu = () => {
+    setIsMenuOpen(false)
+  }
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+    closeMenu()
+  }
 
   return (
     <>
-      {/* Top Contact Bar */}
-      <div style={topBarStyle}>
-        <div className="container" style={topBarContainerStyle}>
-          <div style={contactInfoStyle}>
-            <span style={contactItemStyle}>
-              📞 Emergency: +1 (555) 123-4567
-            </span>
-          </div>
-          <div style={contactInfoStyle}>
-            <span style={contactItemStyle}>
-              ✉️ info@citygeneralhospital.com
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navigation */}
       <nav style={navStyle}>
-        <div className="container" style={containerStyle}>
-          <Link href="/" style={logoStyle}>
-            <h2>🏥 Akshay Hospital</h2>
+        <div className="container navbar-container" style={navContainerStyle}>
+          {/* Logo */}
+          <Link href="/" style={logoStyle} onClick={closeMenu}>
+            🏥 HealthCare Plus
           </Link>
           
-          <div style={menuToggleStyle} onClick={() => setIsOpen(!isOpen)}>
-            <span style={{...hamburgerStyle, transform: isOpen ? 'rotate(-45deg) translate(-5px, 6px)' : 'none'}}></span>
-            <span style={{...hamburgerStyle, opacity: isOpen ? '0' : '1'}}></span>
-            <span style={{...hamburgerStyle, transform: isOpen ? 'rotate(45deg) translate(-5px, -6px)' : 'none'}}></span>
-          </div>
-          
-          <ul style={{...menuStyle, display: isOpen ? 'flex' : 'none'}} className="nav-menu">
-            <li><Link href="/" style={linkStyle} onClick={() => setIsOpen(false)}>Home</Link></li>
-            <li><Link href="/#services" style={linkStyle} onClick={() => setIsOpen(false)}>Services</Link></li>
-            <li><Link href="/appointment" style={linkStyle} onClick={() => setIsOpen(false)}>Book Appointment</Link></li>
-            <li><Link href="/dashboard" style={linkStyle} onClick={() => setIsOpen(false)}>Dashboard</Link></li>
-            <li><Link href="/#contact" style={linkStyle} onClick={() => setIsOpen(false)}>Contact</Link></li>
+          {/* Hamburger Menu Button */}
+          <button 
+            onClick={toggleMenu}
+            className="hamburger-btn"
+            style={hamburgerBtnStyle}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMenuOpen}
+          >
+            <div 
+              className={`hamburger-line ${isMenuOpen ? 'active' : ''}`} 
+              style={hamburgerLineStyle}
+            />
+            <div 
+              className={`hamburger-line ${isMenuOpen ? 'active' : ''}`} 
+              style={hamburgerLineStyle}
+            />
+            <div 
+              className={`hamburger-line ${isMenuOpen ? 'active' : ''}`} 
+              style={hamburgerLineStyle}
+            />
+          </button>
+
+          {/* Navigation Menu */}
+          <ul 
+            className={`nav-menu ${isMenuOpen ? 'nav-menu-open' : ''}`} 
+            style={{
+              ...navMenuStyle,
+              ...(isMobile && isMenuOpen ? navMenuMobileOpenStyle : {}),
+              ...(isMobile && !isMenuOpen ? navMenuMobileClosedStyle : {})
+            }}
+          >
+            <li style={navItemStyle}>
+              <Link href="/" style={navLinkStyle} onClick={closeMenu}>
+                Home
+              </Link>
+            </li>
+            <li style={navItemStyle}>
+              <button 
+                onClick={() => scrollToSection('services')} 
+                style={navLinkBtnStyle}
+              >
+                Services
+              </button>
+            </li>
+            <li style={navItemStyle}>
+              <button 
+                onClick={() => scrollToSection('about')} 
+                style={navLinkBtnStyle}
+              >
+                About
+              </button>
+            </li>
+            <li style={navItemStyle}>
+              <button 
+                onClick={() => scrollToSection('testimonials')} 
+                style={navLinkBtnStyle}
+              >
+                Reviews
+              </button>
+            </li>
+            <li style={navItemStyle}>
+              <Link href="/appointment" style={navLinkStyle} onClick={closeMenu}>
+                Appointment
+              </Link>
+            </li>
+            <li style={navItemStyle}>
+              <button 
+                onClick={() => scrollToSection('contact')} 
+                style={navLinkBtnStyle}
+              >
+                Contact
+              </button>
+            </li>
+            <li style={navItemStyle}>
+              <Link href="/dashboard" style={navLinkSpecialStyle} onClick={closeMenu}>
+                Dashboard
+              </Link>
+            </li>
           </ul>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobile && isMenuOpen && (
+          <div 
+            style={overlayStyle}
+            onClick={closeMenu}
+          />
+        )}
       </nav>
-
-      <style jsx global>{`
-        @media (min-width: 769px) {
-          .nav-menu {
-            display: flex !important;
-          }
-        }
-        
-        @media (max-width: 768px) {
-          .nav-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            flex-direction: column;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 20px 0;
-            z-index: 1000;
-          }
-          
-          .nav-menu li {
-            margin: 10px 0;
-            text-align: center;
-          }
-
-          .top-bar {
-            display: none;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .top-bar-container {
-            flex-direction: column;
-            gap: 5px;
-            text-align: center;
-          }
-        }
-      `}</style>
     </>
   )
 }
 
-// Styles
-const topBarStyle = {
-  background: '#2c3e50',
-  color: 'white',
-  padding: '8px 0',
-  fontSize: '0.9rem'
-}
-
-const topBarContainerStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  flexWrap: 'wrap'
-}
-
-const contactInfoStyle = {
-  display: 'flex',
-  alignItems: 'center'
-}
-
-const contactItemStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '5px',
-  color: '#ecf0f1'
-}
-
+// Compact Responsive Styles with Standard Height
 const navStyle = {
-  background: 'white',
-  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+  padding: '0.75rem 0', // Fixed standard padding
+  boxShadow: '0 2px 15px rgba(102, 126, 234, 0.25)',
   position: 'sticky',
   top: 0,
   zIndex: 1000,
-  padding: '1rem 0'
+  transition: 'all 0.3s ease',
+  backdropFilter: 'blur(10px)',
+  minHeight: '64px', // Standard navbar height
+  maxHeight: '64px'
 }
 
-const containerStyle = {
+const navContainerStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  position: 'relative'
+  position: 'relative',
+  height: '48px' // Fixed container height
 }
 
 const logoStyle = {
+  fontSize: '1.25rem', // Fixed logo size
+  fontWeight: 'bold',
+  color: 'white',
   textDecoration: 'none',
-  color: '#007bff',
-  fontWeight: 'bold'
+  transition: 'all 0.3s ease',
+  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+  lineHeight: '1'
 }
 
-const menuStyle = {
-  listStyle: 'none',
-  gap: '2rem',
-  alignItems: 'center',
-  margin: 0,
-  padding: 0
-}
-
-const linkStyle = {
-  textDecoration: 'none',
-  color: '#333',
-  fontWeight: '500',
-  transition: 'color 0.3s ease',
-  position: 'relative'
-}
-
-const menuToggleStyle = {
+const hamburgerBtnStyle = {
   display: 'none',
   flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  background: 'none',
+  border: 'none',
   cursor: 'pointer',
-  padding: '5px',
-  '@media (max-width: 768px)': {
-    display: 'flex'
-  }
+  padding: '0.5rem',
+  zIndex: 1001,
+  transition: 'transform 0.3s ease',
+  width: '40px',
+  height: '40px'
 }
 
-const hamburgerStyle = {
-  width: '25px',
-  height: '3px',
-  background: '#333',
-  margin: '3px 0',
-  transition: '0.3s',
-  transformOrigin: 'center'
+const hamburgerLineStyle = {
+  width: '20px', // Smaller hamburger lines
+  height: '2px',
+  backgroundColor: 'white',
+  margin: '2px 0',
+  transition: 'all 0.3s ease',
+  borderRadius: '1px',
+  boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+}
+
+const navMenuStyle = {
+  display: 'flex',
+  listStyle: 'none',
+  margin: 0,
+  padding: 0,
+  alignItems: 'center',
+  gap: '0.5rem', // Reduced gap for compact design
+  transition: 'all 0.3s ease'
+}
+
+const navMenuMobileOpenStyle = {
+  position: 'fixed',
+  top: '64px', // Match navbar height
+  left: 0,
+  width: '100%',
+  height: 'calc(100vh - 64px)',
+  background: 'linear-gradient(180deg, rgba(102, 126, 234, 0.98) 0%, rgba(118, 75, 162, 0.98) 50%, rgba(240, 147, 251, 0.98) 100%)',
+  backdropFilter: 'blur(15px)',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '2rem 1rem',
+  gap: '1.5rem', // Reduced gap
+  zIndex: 999,
+  opacity: 1,
+  visibility: 'visible',
+  transform: 'translateX(0)',
+  boxShadow: '0 4px 30px rgba(0,0,0,0.3)'
+}
+
+const navMenuMobileClosedStyle = {
+  position: 'fixed',
+  top: '64px',
+  left: 0,
+  width: '100%',
+  height: 'calc(100vh - 64px)',
+  background: 'linear-gradient(180deg, rgba(102, 126, 234, 0.98) 0%, rgba(118, 75, 162, 0.98) 50%, rgba(240, 147, 251, 0.98) 100%)',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '2rem 1rem',
+  gap: '1.5rem',
+  zIndex: 999,
+  opacity: 0,
+  visibility: 'hidden',
+  transform: 'translateX(-100%)',
+  transition: 'all 0.3s ease'
+}
+
+const navItemStyle = {
+  margin: 0
+}
+
+const navLinkStyle = {
+  color: 'white',
+  textDecoration: 'none',
+  fontWeight: '500',
+  fontSize: '0.9rem', // Fixed compact font size
+  padding: '0.5rem 0.8rem', // Reduced padding
+  borderRadius: '6px',
+  transition: 'all 0.3s ease',
+  display: 'block',
+  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+  border: '1px solid transparent',
+  whiteSpace: 'nowrap'
+}
+
+const navLinkBtnStyle = {
+  color: 'white',
+  background: 'none',
+  border: '1px solid transparent',
+  fontWeight: '500',
+  fontSize: '0.9rem', // Fixed compact font size
+  padding: '0.5rem 0.8rem', // Reduced padding
+  borderRadius: '6px',
+  transition: 'all 0.3s ease',
+  cursor: 'pointer',
+  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+  fontFamily: 'inherit',
+  whiteSpace: 'nowrap'
+}
+
+const navLinkSpecialStyle = {
+  color: 'white',
+  textDecoration: 'none',
+  fontWeight: '600',
+  fontSize: '0.9rem', // Fixed compact font size
+  padding: '0.5rem 0.8rem', // Reduced padding
+  borderRadius: '6px',
+  transition: 'all 0.3s ease',
+  display: 'block',
+  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+  border: '1px solid rgba(255,255,255,0.4)',
+  background: 'rgba(255,255,255,0.15)',
+  whiteSpace: 'nowrap'
+}
+
+const overlayStyle = {
+  position: 'fixed',
+  top: '64px', // Match navbar height
+  left: 0,
+  width: '100%',
+  height: 'calc(100vh - 64px)',
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  zIndex: 998
 }

@@ -1,7 +1,12 @@
+// app/appointment/page.js
 'use client'
 import { useState, useEffect } from 'react'
+import { useAuth } from '../../contexts/AuthContext'
+import AuthModal from '../../components/AuthModal'
 
 export default function Appointment() {
+  const { currentUser } = useAuth()
+  const [showAuthModal, setShowAuthModal] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,6 +32,17 @@ export default function Appointment() {
     '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
     '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
   ]
+
+  // Populate user data when logged in
+  useEffect(() => {
+    if (currentUser) {
+      setFormData(prev => ({
+        ...prev,
+        name: currentUser.displayName || '',
+        email: currentUser.email || ''
+      }))
+    }
+  }, [currentUser])
 
   useEffect(() => {
     if (formData.date) {
@@ -55,6 +71,12 @@ export default function Appointment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (!currentUser) {
+      setShowAuthModal(true)
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -63,7 +85,11 @@ export default function Appointment() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          userId: currentUser.uid,
+          userEmail: currentUser.email
+        }),
       })
 
       const result = await response.json()
@@ -71,8 +97,8 @@ export default function Appointment() {
       if (response.ok) {
         alert('Appointment booked successfully!')
         setFormData({
-          name: '',
-          email: '',
+          name: currentUser.displayName || '',
+          email: currentUser.email || '',
           phone: '',
           date: '',
           time: '',
@@ -96,7 +122,6 @@ export default function Appointment() {
       [name]: value
     }))
 
-    // Reset doctor and time when date changes
     if (name === 'date') {
       setFormData(prev => ({
         ...prev,
@@ -106,7 +131,6 @@ export default function Appointment() {
     }
   }
 
-  // Get minimum date (today)
   const today = new Date().toISOString().split('T')[0]
 
   return (
@@ -115,127 +139,149 @@ export default function Appointment() {
         <div style={headerStyle}>
           <h1 style={titleStyle}>📅 Book an Appointment</h1>
           <p style={subtitleStyle}>Schedule your visit with our expert medical team</p>
+          
+          {!currentUser && (
+            <div style={authPromptStyle}>
+              <p>🔐 Please log in to book an appointment</p>
+              <button 
+                onClick={() => setShowAuthModal(true)}
+                className="btn btn-primary"
+                style={authPromptBtnStyle}
+              >
+                Login / Sign Up
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="card" style={formContainerStyle}>
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-2">
-              <div className="form-group">
-                <label htmlFor="name">Full Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Enter your full name"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email Address *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="phone">Phone Number *</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  required
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="+1 (555) 123-4567"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="date">Preferred Date *</label>
-                <input
-                  type="date"
-                  id="date"
-                  name="date"
-                  required
-                  min={today}
-                  value={formData.date}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="doctor">Preferred Doctor</label>
-                <select
-                  id="doctor"
-                  name="doctor"
-                  value={formData.doctor}
-                  onChange={handleChange}
-                  disabled={!formData.date || loading}
-                >
-                  <option value="">
-                    {loading ? 'Checking availability...' : 'Select a doctor'}
-                  </option>
-                  {availableDoctors.map((doctor) => (
-                    <option key={doctor} value={doctor}>
-                      {doctor}
-                    </option>
-                  ))}
-                </select>
-                {formData.date && !loading && availableDoctors.length === 0 && (
-                  <small style={warningStyle}>No doctors available on this date</small>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="time">Preferred Time *</label>
-                <select
-                  id="time"
-                  name="time"
-                  required
-                  value={formData.time}
-                  onChange={handleChange}
-                  disabled={!formData.doctor}
-                >
-                  <option value="">Select a time</option>
-                  {timeSlots.map((time) => (
-                    <option key={time} value={time}>
-                      {formatTime(time)}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        {currentUser && (
+          <div className="card" style={formContainerStyle}>
+            <div style={userWelcomeStyle}>
+              <h3>👋 Welcome, {currentUser.displayName || currentUser.email}!</h3>
+              <p>Fill out the form below to book your appointment</p>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="reason">Reason for Visit</label>
-              <textarea
-                id="reason"
-                name="reason"
-                value={formData.reason}
-                onChange={handleChange}
-                placeholder="Briefly describe your symptoms or reason for visit (optional)"
-              />
-            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-2">
+                <div className="form-group">
+                  <label htmlFor="name">Full Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                  />
+                </div>
 
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
-              style={submitButtonStyle}
-              disabled={isSubmitting || !formData.date || availableDoctors.length === 0}
-            >
-              {isSubmitting ? 'Booking...' : 'Book Appointment'}
-            </button>
-          </form>
-        </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email Address *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    disabled
+                    style={disabledInputStyle}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="phone">Phone Number *</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="date">Preferred Date *</label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                    min={today}
+                    value={formData.date}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="doctor">Preferred Doctor</label>
+                  <select
+                    id="doctor"
+                    name="doctor"
+                    value={formData.doctor}
+                    onChange={handleChange}
+                    disabled={!formData.date || loading}
+                  >
+                    <option value="">
+                      {loading ? 'Checking availability...' : 'Select a doctor'}
+                    </option>
+                    {availableDoctors.map((doctor) => (
+                      <option key={doctor} value={doctor}>
+                        {doctor}
+                      </option>
+                    ))}
+                  </select>
+                  {formData.date && !loading && availableDoctors.length === 0 && (
+                    <small style={warningStyle}>No doctors available on this date</small>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="time">Preferred Time *</label>
+                  <select
+                    id="time"
+                    name="time"
+                    required
+                    value={formData.time}
+                    onChange={handleChange}
+                    disabled={!formData.doctor}
+                  >
+                    <option value="">Select a time</option>
+                    {timeSlots.map((time) => (
+                      <option key={time} value={time}>
+                        {formatTime(time)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="reason">Reason for Visit</label>
+                <textarea
+                  id="reason"
+                  name="reason"
+                  value={formData.reason}
+                  onChange={handleChange}
+                  placeholder="Briefly describe your symptoms or reason for visit (optional)"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                className="btn btn-primary" 
+                style={submitButtonStyle}
+                disabled={isSubmitting || !formData.date || availableDoctors.length === 0}
+              >
+                {isSubmitting ? 'Booking...' : 'Book Appointment'}
+              </button>
+            </form>
+          </div>
+        )}
 
         <div className="card" style={infoStyle}>
           <h3>📋 Appointment Information</h3>
@@ -245,9 +291,16 @@ export default function Appointment() {
             <li>🕐 Please arrive 15 minutes early for your appointment</li>
             <li>📄 Bring a valid ID and insurance card</li>
             <li>❌ Cancellations must be made 24 hours in advance</li>
+            <li>🔐 You must be logged in to book appointments</li>
           </ul>
         </div>
       </div>
+
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode="login"
+      />
     </div>
   )
 }
@@ -283,9 +336,37 @@ const subtitleStyle = {
   color: '#666'
 }
 
+const authPromptStyle = {
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  color: 'white',
+  padding: '2rem',
+  borderRadius: '15px',
+  marginTop: '2rem',
+  textAlign: 'center'
+}
+
+const authPromptBtnStyle = {
+  marginTop: '1rem',
+  padding: '12px 30px',
+  fontSize: '1.1rem'
+}
+
+const userWelcomeStyle = {
+  background: '#e7f3ff',
+  padding: '1.5rem',
+  borderRadius: '10px',
+  marginBottom: '2rem',
+  textAlign: 'center'
+}
+
 const formContainerStyle = {
   maxWidth: '800px',
   margin: '0 auto 2rem'
+}
+
+const disabledInputStyle = {
+  backgroundColor: '#f8f9fa',
+  cursor: 'not-allowed'
 }
 
 const submitButtonStyle = {

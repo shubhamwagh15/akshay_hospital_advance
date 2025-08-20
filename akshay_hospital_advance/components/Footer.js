@@ -1,3 +1,4 @@
+// components/Footer.js
 import Link from 'next/link'
 
 export default function Footer() {
@@ -6,58 +7,54 @@ export default function Footer() {
       <div className="container">
         <div style={footerContentStyle}>
           <div style={footerSectionStyle}>
-            <h3 style={footerTitleStyle}>🏥 Akshay Hospital</h3>
+            <h3 style={footerTitleStyle}>🏥 HealthCare Plus</h3>
             <p style={footerDescStyle}>
-              Providing exceptional healthcare services with compassion and expertise since 1985.
+              Providing excellent healthcare services with compassion, 
+              innovation, and dedication to patient well-being.
             </p>
             <div style={socialLinksStyle}>
               <a href="#" style={socialLinkStyle}>📘</a>
               <a href="#" style={socialLinkStyle}>🐦</a>
-              <a href="#" style={socialLinkStyle}>📷</a>
+              <a href="#" style={socialLinkStyle}>📸</a>
               <a href="#" style={socialLinkStyle}>💼</a>
             </div>
           </div>
-          
+
           <div style={footerSectionStyle}>
-            <h4 style={footerSubTitleStyle}>Quick Links</h4>
+            <h4 style={footerSectionTitleStyle}>Quick Links</h4>
             <ul style={footerListStyle}>
               <li><Link href="/" style={footerLinkStyle}>Home</Link></li>
-              <li><Link href="/#services" style={footerLinkStyle}>Services</Link></li>
               <li><Link href="/appointment" style={footerLinkStyle}>Book Appointment</Link></li>
               <li><Link href="/dashboard" style={footerLinkStyle}>Dashboard</Link></li>
+              <li><a href="#" style={footerLinkStyle}>About Us</a></li>
             </ul>
           </div>
-          
+
           <div style={footerSectionStyle}>
-            <h4 style={footerSubTitleStyle}>Services</h4>
+            <h4 style={footerSectionTitleStyle}>Services</h4>
             <ul style={footerListStyle}>
-              <li style={footerListItemStyle}>General Medicine</li>
-              <li style={footerListItemStyle}>Emergency Care</li>
-              <li style={footerListItemStyle}>Specialized Care</li>
-              <li style={footerListItemStyle}>Diagnostics</li>
+              <li><a href="#" style={footerLinkStyle}>Emergency Care</a></li>
+              <li><a href="#" style={footerLinkStyle}>Laboratory Services</a></li>
+              <li><a href="#" style={footerLinkStyle}>Pharmacy</a></li>
+              <li><a href="#" style={footerLinkStyle}>Specialist Consultations</a></li>
             </ul>
           </div>
-          
+
           <div style={footerSectionStyle}>
-            <h4 style={footerSubTitleStyle}>Contact Info</h4>
+            <h4 style={footerSectionTitleStyle}>Contact Info</h4>
             <div style={contactInfoStyle}>
-              <p style={contactItemStyle}>📍 123 Healthcare Avenue, Medical City, MC 12345</p>
-              <p style={contactItemStyle}>📞 +1 (555) 123-4567</p>
-              <p style={contactItemStyle}>✉️ info@citygeneralhospital.com</p>
-              <p style={contactItemStyle}>🕐 24/7 Emergency Services</p>
+              <p style={contactItemStyle}>📍 123 Healthcare Ave, Medical District</p>
+              <p style={contactItemStyle}>📞 (555) 123-4567</p>
+              <p style={contactItemStyle}>✉️ info@healthcareplus.com</p>
+              <p style={contactItemStyle}>🕒 24/7 Emergency Services</p>
             </div>
           </div>
         </div>
-        
+
         <div style={footerBottomStyle}>
-          <div style={footerBottomContentStyle}>
-            <p>&copy; 2024 Akshay Hospital. All rights reserved.</p>
-            <div style={footerBottomLinksStyle}>
-              <Link href="#" style={footerBottomLinkStyle}>Privacy Policy</Link>
-              <Link href="#" style={footerBottomLinkStyle}>Terms of Service</Link>
-              <Link href="#" style={footerBottomLinkStyle}>HIPAA Notice</Link>
-            </div>
-          </div>
+          <p style={copyrightStyle}>
+            © 2025 HealthCare Plus. All rights reserved. | Privacy Policy | Terms of Service
+          </p>
         </div>
       </div>
     </footer>
@@ -68,7 +65,7 @@ export default function Footer() {
 const footerStyle = {
   background: '#2c3e50',
   color: 'white',
-  padding: '3rem 0 0'
+  padding: '3rem 0 1rem 0'
 }
 
 const footerContentStyle = {
@@ -79,7 +76,8 @@ const footerContentStyle = {
 }
 
 const footerSectionStyle = {
-  marginBottom: '1rem'
+  display: 'flex',
+  flexDirection: 'column'
 }
 
 const footerTitleStyle = {
@@ -88,10 +86,10 @@ const footerTitleStyle = {
   color: '#3498db'
 }
 
-const footerSubTitleStyle = {
+const footerSectionTitleStyle = {
   fontSize: '1.2rem',
   marginBottom: '1rem',
-  color: '#ecf0f1'
+  color: '#3498db'
 }
 
 const footerDescStyle = {
@@ -100,28 +98,9 @@ const footerDescStyle = {
   marginBottom: '1rem'
 }
 
-const footerListStyle = {
-  listStyle: 'none',
-  padding: 0
-}
-
-const footerListItemStyle = {
-  padding: '5px 0',
-  color: '#bdc3c7'
-}
-
-const footerLinkStyle = {
-  color: '#bdc3c7',
-  textDecoration: 'none',
-  transition: 'color 0.3s ease',
-  display: 'block',
-  padding: '5px 0'
-}
-
 const socialLinksStyle = {
   display: 'flex',
-  gap: '1rem',
-  marginTop: '1rem'
+  gap: '1rem'
 }
 
 const socialLinkStyle = {
@@ -130,37 +109,39 @@ const socialLinkStyle = {
   transition: 'transform 0.3s ease'
 }
 
+const footerListStyle = {
+  listStyle: 'none',
+  padding: 0,
+  margin: 0
+}
+
+const footerLinkStyle = {
+  color: '#bdc3c7',
+  textDecoration: 'none',
+  display: 'block',
+  padding: '0.3rem 0',
+  transition: 'color 0.3s ease'
+}
+
 const contactInfoStyle = {
-  color: '#bdc3c7'
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem'
 }
 
 const contactItemStyle = {
-  marginBottom: '0.5rem',
-  display: 'flex',
-  alignItems: 'center'
+  color: '#bdc3c7',
+  margin: 0
 }
 
 const footerBottomStyle = {
   borderTop: '1px solid #34495e',
-  padding: '1.5rem 0',
-  marginTop: '2rem'
+  paddingTop: '1rem',
+  textAlign: 'center'
 }
 
-const footerBottomContentStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-  gap: '1rem'
-}
-
-const footerBottomLinksStyle = {
-  display: 'flex',
-  gap: '1.5rem'
-}
-
-const footerBottomLinkStyle = {
-  color: '#bdc3c7',
-  textDecoration: 'none',
-  fontSize: '0.9rem'
+const copyrightStyle = {
+  color: '#95a5a6',
+  fontSize: '0.9rem',
+  margin: 0
 }

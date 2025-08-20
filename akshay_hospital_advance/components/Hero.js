@@ -1,102 +1,92 @@
+// components/Hero.js
 'use client'
-import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 export default function Hero() {
-  const slides = useMemo(
-    () => ['/hospital-1.jpg', '/hospital-2.jpg', '/hospital-3.jpg'],
-    []
-  )
-  const [index, setIndex] = useState(0)
-  const timerRef = useRef(null)
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isVisible, setIsVisible] = useState(true)
 
-  // Preload images
-  useEffect(() => {
-    slides.forEach((src) => {
-      const img = new Image()
-      img.src = src
-    })
-  }, [slides])
-
-  // Auto-advance every 10s with cleanup
-  useEffect(() => {
-    startAuto()
-    return stopAuto
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slides])
-
-  const startAuto = () => {
-    stopAuto()
-    timerRef.current = setInterval(() => {
-      setIndex((prev) => (prev + 1) % slides.length)
-    }, 10000)
-  }
-
-  const stopAuto = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current)
-      timerRef.current = null
+  const slides = [
+    {
+      image: '/hospital-1.jpg',
+      title: 'Advanced Medical Care',
+      subtitle: 'State-of-the-art facilities with experienced professionals'
+    },
+    {
+      image: '/hospital-2.jpg', 
+      title: '24/7 Emergency Services',
+      subtitle: 'Round-the-clock emergency care when you need it most'
+    },
+    {
+      image: '/hospital-3.jpg',
+      title: 'Comprehensive Healthcare',
+      subtitle: 'Complete range of medical services under one roof'
     }
-  }
+  ]
 
-  const goTo = (i) => {
-    setIndex(i)
-    startAuto() // restart timer on manual change
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsVisible(false)
+      setTimeout(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length)
+        setIsVisible(true)
+      }, 300)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [slides.length])
+
+  const goToSlide = (index) => {
+    setIsVisible(false)
+    setTimeout(() => {
+      setCurrentSlide(index)
+      setIsVisible(true)
+    }, 300)
   }
 
   return (
-    <section style={heroStyle} aria-label="Hero background slideshow">
-      {/* Background layers */}
-      <div style={bgContainerStyle} aria-hidden="true">
-        {slides.map((src, i) => (
-          <div
-            key={src}
-            style={{
-              ...bgSlideStyle,
-              opacity: index === i ? 1 : 0,
-              backgroundImage: `url(${src})`,
-            }}
-          />
-        ))}
-        <div style={overlayStyle} />
-      </div>
-
-      {/* Content */}
-      <div className="container" style={contentStyle}>
-        <div style={textColStyle}>
-          <h1 style={titleStyle}>Your Health, Our Priority</h1>
-          <p style={descStyle}>
-            Providing exceptional healthcare with compassion and expertise. Book your appointment and
-            experience world-class medical care.
-          </p>
-          <div style={btnRowStyle}>
-            <Link href="/appointment" className="btn btn-primary" style={btnStyle}>
-              Book Appointment
-            </Link>
-            <Link href="/#services" className="btn" style={btnStyle}>
-              Our Services
-            </Link>
+    <section style={heroStyle}>
+      <div style={heroSlideStyle}>
+        <div 
+          style={{
+            ...heroImageStyle,
+            backgroundImage: `url(${slides[currentSlide].image})`,
+            opacity: isVisible ? 1 : 0.7
+          }}
+        />
+        <div style={heroOverlayStyle}>
+          <div className="container">
+            <div 
+              style={{
+                ...heroContentStyle,
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(20px)'
+              }}
+            >
+              <h1 style={heroTitleStyle}>{slides[currentSlide].title}</h1>
+              <p style={heroSubtitleStyle}>{slides[currentSlide].subtitle}</p>
+              <div style={heroButtonsStyle}>
+                <Link href="/appointment" className="btn btn-primary" style={heroBtnStyle}>
+                  Book Appointment
+                </Link>
+                <Link href="/dashboard" className="btn" style={heroBtnSecondaryStyle}>
+                  View Dashboard
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-        <div style={rightColStyle} />
       </div>
 
-      {/* Dots */}
-      <div style={dotsStyle} role="tablist" aria-label="Slideshow controls">
-        {slides.map((_, i) => (
+      <div style={dotsContainerStyle}>
+        {slides.map((_, index) => (
           <button
-            key={i}
-            type="button"
-            onClick={() => goTo(i)}
-            onMouseEnter={stopAuto}
-            onMouseLeave={startAuto}
-            aria-label={`Go to slide ${i + 1}`}
-            aria-selected={index === i}
-            role="tab"
+            key={index}
+            onClick={() => goToSlide(index)}
             style={{
               ...dotStyle,
-              backgroundColor: index === i ? '#fff' : 'rgba(255,255,255,0.5)',
-              transform: index === i ? 'scale(1.15)' : 'scale(1)',
+              backgroundColor: currentSlide === index ? '#007bff' : 'rgba(255,255,255,0.5)'
             }}
           />
         ))}
@@ -105,108 +95,99 @@ export default function Hero() {
   )
 }
 
-/* Styles */
+// Styles
 const heroStyle = {
   position: 'relative',
-  color: 'white',
-  padding: '5rem 0',
-  minHeight: '70vh',
-  display: 'flex',
-  alignItems: 'center',
-  overflow: 'hidden',
+  height: '100vh',
+  overflow: 'hidden'
 }
 
-const bgContainerStyle = {
-  position: 'absolute',
-  inset: 0,
-  zIndex: -2,
+const heroSlideStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%'
 }
 
-const bgSlideStyle = {
+const heroImageStyle = {
   position: 'absolute',
-  inset: 0,
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-  transition: 'opacity 800ms ease-in-out',
+  transition: 'opacity 0.3s ease-in-out'
 }
 
-const overlayStyle = {
+const heroOverlayStyle = {
   position: 'absolute',
-  inset: 0,
-  background:
-    'linear-gradient(135deg, rgba(0,123,255,0.75) 0%, rgba(40,167,69,0.75) 100%)',
-  zIndex: -1,
-}
-
-const contentStyle = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: '3rem',
-  alignItems: 'center',
-  position: 'relative',
-  zIndex: 1,
-}
-
-const textColStyle = {
-  maxWidth: '560px',
-}
-
-const rightColStyle = {
-  minHeight: '200px',
-}
-
-const titleStyle = {
-  fontSize: '3rem',
-  fontWeight: '800',
-  marginBottom: '1rem',
-  lineHeight: 1.2,
-  textShadow: '2px 2px 4px rgba(0,0,0,0.35)',
-}
-
-const descStyle = {
-  fontSize: '1.15rem',
-  marginBottom: '2rem',
-  opacity: 0.98,
-  textShadow: '1px 1px 2px rgba(0,0,0,0.35)',
-}
-
-const btnRowStyle = {
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  background: 'rgba(0, 0, 0, 0.4)',
   display: 'flex',
-  gap: '1rem',
-  flexWrap: 'wrap',
+  alignItems: 'center',
+  justifyContent: 'center'
 }
 
-const btnStyle = {
-  fontSize: '1.05rem',
-  padding: '14px 26px',
-  boxShadow: '0 6px 14px rgba(0,0,0,0.2)',
-  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+const heroContentStyle = {
+  textAlign: 'center',
+  color: 'white',
+  maxWidth: '800px',
+  transition: 'all 0.3s ease-in-out'
 }
 
-const dotsStyle = {
+const heroTitleStyle = {
+  fontSize: '3.5rem',
+  fontWeight: 'bold',
+  marginBottom: '1.5rem',
+  textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+}
+
+const heroSubtitleStyle = {
+  fontSize: '1.3rem',
+  marginBottom: '2.5rem',
+  textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+}
+
+const heroButtonsStyle = {
+  display: 'flex',
+  gap: '1.5rem',
+  justifyContent: 'center',
+  flexWrap: 'wrap'
+}
+
+const heroBtnStyle = {
+  fontSize: '1.1rem',
+  padding: '15px 30px',
+  textDecoration: 'none'
+}
+
+const heroBtnSecondaryStyle = {
+  fontSize: '1.1rem',
+  padding: '15px 30px',
+  background: 'rgba(255,255,255,0.1)',
+  color: 'white',
+  border: '2px solid white',
+  textDecoration: 'none'
+}
+
+const dotsContainerStyle = {
   position: 'absolute',
-  bottom: '1.75rem',
+  bottom: '30px',
   left: '50%',
   transform: 'translateX(-50%)',
   display: 'flex',
-  gap: '0.75rem',
-  zIndex: 2,
+  gap: '15px',
+  zIndex: 10
 }
 
 const dotStyle = {
-  width: '12px',
-  height: '12px',
+  width: '15px',
+  height: '15px',
   borderRadius: '50%',
-  border: '2px solid white',
+  border: 'none',
   cursor: 'pointer',
-  transition: 'all 0.2s ease',
-  outline: 'none',
+  transition: 'all 0.3s ease'
 }
-
-/* Optional: add responsive tweaks in globals.css if needed:
-@media (max-width: 768px) {
-  .container { text-align: center; }
-}
-*/
-

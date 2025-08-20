@@ -1,40 +1,46 @@
+// components/DoctorIntro.js
 'use client'
-import Link from 'next/link'
+import { useState } from 'react'
 
 export default function DoctorIntro() {
-  const handleImageError = (e) => {
-    e.target.style.display = 'none';
-    const placeholder = e.target.nextElementSibling;
-    if (placeholder) {
-      placeholder.style.display = 'flex';
-    }
-  }
-
   return (
-    <section style={doctorsIntroStyle}>
+    <section style={sectionStyle}>
       <div className="container">
-        <div style={doctorsIntroContentStyle}>
-          <div style={doctorsTextStyle}>
-            <h2 style={doctorsTitleStyle}>Meet Our Expert Medical Team</h2>
-            <p style={doctorsDescStyle}>
-              Our hospital is proud to have a team of highly qualified and experienced doctors who are dedicated to providing exceptional patient care. Our medical professionals are board-certified specialists with years of expertise in their respective fields. All our doctors are certified by recognized medical boards and maintain continuing education requirements, ensuring they stay current with the latest medical advances and best practices. Our medical team has received numerous awards for excellence in patient care and medical innovation, and we believe in treating each patient with compassion, respect, and personalized attention. From emergency care to specialized treatments, our doctors work collaboratively to ensure comprehensive healthcare delivery that meets the unique needs of every patient who walks through our doors.
-            </p>
-            <Link href="/appointment" className="btn btn-primary" style={doctorsButtonStyle}>
-              Meet Our Doctors
-            </Link>
-          </div>
-          <div style={doctorsImageContainerStyle}>
-            <img
+        <div style={contentStyle}>
+          <div style={imageContainerStyle}>
+            <ImageWithFallback 
               src="/professional-doctor.png"
-              alt="Professional Doctor Portrait"
-              style={doctorsImageStyle}
-              onError={handleImageError}
+              alt="Expert Medical Team"
             />
-            <div style={doctorsImagePlaceholderStyle}>
-              <div style={doctorsImageContentStyle}>
-                <div style={doctorIconStyle}>👨‍⚕️</div>
-                <h3 style={imageLabelStyle}>Expert Medical Team</h3>
-                <p style={imageSubLabelStyle}>Board-certified professionals</p>
+          </div>
+          
+          <div style={textContentStyle}>
+            <h2 style={titleStyle}>Meet Our Expert Medical Team</h2>
+            <p style={descStyle}>
+              Our team of highly qualified doctors and medical professionals bring decades of combined 
+              experience in their respective specialties. Each member of our team is committed to providing 
+              personalized, compassionate care while staying current with the latest medical advances and 
+              treatment protocols.
+            </p>
+            
+            <div style={credentialsStyle}>
+              <div style={credentialItemStyle}>
+                <div style={credentialIconStyle}>🏆</div>
+                <div>
+                  <strong>Board Certified:</strong> All our doctors are board-certified in their specialties
+                </div>
+              </div>
+              <div style={credentialItemStyle}>
+                <div style={credentialIconStyle}>📚</div>
+                <div>
+                  <strong>Continuing Education:</strong> Regular training on latest medical procedures
+                </div>
+              </div>
+              <div style={credentialItemStyle}>
+                <div style={credentialIconStyle}>❤️</div>
+                <div>
+                  <strong>Patient-Centered:</strong> Focused on individualized treatment plans
+                </div>
               </div>
             </div>
           </div>
@@ -44,105 +50,166 @@ export default function DoctorIntro() {
   )
 }
 
-// Styles
-const doctorsIntroStyle = {
-  padding: '5rem 0',
+function ImageWithFallback({ src, alt }) {
+  const [hasError, setHasError] = useState(false)
+  
+  if (hasError) {
+    return (
+      <div style={imagePlaceholderStyle}>
+        👨‍⚕️ Expert Medical Team
+      </div>
+    )
+  }
+  
+  return (
+    <img
+      src={src}
+      alt={alt}
+      style={imageStyle}
+      onError={() => setHasError(true)}
+    />
+  )
+}
+
+// Responsive Styles
+const sectionStyle = {
+  padding: 'clamp(3rem, 8vw, 5rem) 0',
   background: '#f8f9fa'
 }
 
-const doctorsIntroContentStyle = {
+const contentStyle = {
   display: 'grid',
-  gridTemplateColumns: '2fr 1fr',
-  gap: '4rem',
-  alignItems: 'stretch',
-  minHeight: '450px'
+  gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
+  gap: 'clamp(2rem, 6vw, 4rem)',
+  alignItems: 'center'
 }
 
-const doctorsTextStyle = {
+const imageContainerStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  order: 1
+}
+
+const imageStyle = {
+  width: '100%',
+  maxWidth: '400px',
+  height: 'auto',
+  borderRadius: '15px',
+  boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+}
+
+const imagePlaceholderStyle = {
+  background: 'white',
+  border: '2px dashed #adb5bd',
+  borderRadius: '15px',
+  padding: 'clamp(2rem, 5vw, 3rem)',
+  textAlign: 'center',
+  fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+  color: '#6c757d',
+  width: '100%',
+  maxWidth: '400px',
+  minHeight: '300px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+}
+
+const textContentStyle = {
+  order: 2
+}
+
+const titleStyle = {
+  fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+  color: '#333',
+  marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
+  fontWeight: 'bold',
+  lineHeight: 1.2
+}
+
+const descStyle = {
+  fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
+  lineHeight: 1.8,
+  color: '#666',
+  marginBottom: 'clamp(1.5rem, 4vw, 2rem)'
+}
+
+const credentialsStyle = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
-  padding: '1rem 0'
+  gap: 'clamp(1rem, 3vw, 1.5rem)'
 }
 
-const doctorsTitleStyle = {
-  fontSize: '2.5rem',
-  color: '#333',
-  marginBottom: '2rem',
-  fontWeight: 'bold'
-}
-
-const doctorsDescStyle = {
-  fontSize: '1.1rem',
-  color: '#666',
-  lineHeight: '1.8',
-  marginBottom: '2.5rem',
-  textAlign: 'justify'
-}
-
-const doctorsButtonStyle = {
-  fontSize: '1.1rem',
-  padding: '15px 30px',
-  alignSelf: 'flex-start',
-  textDecoration: 'none'
-}
-
-const doctorsImageContainerStyle = {
+const credentialItemStyle = {
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  position: 'relative'
+  alignItems: 'flex-start',
+  gap: 'clamp(0.8rem, 2vw, 1rem)',
+  padding: 'clamp(1rem, 2.5vw, 1.2rem)',
+  background: 'white',
+  borderRadius: '10px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+  color: '#555',
+  fontSize: 'clamp(0.9rem, 2vw, 0.95rem)',
+  lineHeight: 1.6,
+  transition: 'transform 0.3s ease, box-shadow 0.3s ease'
 }
 
-const doctorsImageStyle = {
-  width: '100%',
-  height: '100%',
-  minHeight: '450px',
-  maxWidth: '350px',
-  objectFit: 'cover',
-  borderRadius: '15px',
-  boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
-  transition: 'transform 0.3s ease'
+const credentialIconStyle = {
+  fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+  flexShrink: 0,
+  marginTop: '2px'
 }
 
-const doctorsImagePlaceholderStyle = {
-  position: 'absolute',
-  top: 0,
-  left: '50%',
-  transform: 'translateX(-50%)',
-  width: '100%',
-  height: '100%',
-  minHeight: '450px',
-  maxWidth: '350px',
-  background: 'linear-gradient(135deg, #28a745 0%, #1e7e34 100%)',
-  borderRadius: '15px',
-  display: 'none',
-  alignItems: 'center',
-  justifyContent: 'center',
-  boxShadow: '0 8px 20px rgba(40,167,69,0.3)',
-  transition: 'transform 0.3s ease'
+// Responsive Media Queries (Additional CSS-in-JS breakpoints)
+const mobileStyles = {
+  '@media (max-width: 768px)': {
+    contentStyle: {
+      gridTemplateColumns: '1fr',
+      textAlign: 'center'
+    },
+    imageContainerStyle: {
+      order: 1,
+      marginBottom: '1rem'
+    },
+    textContentStyle: {
+      order: 2
+    }
+  }
 }
 
-const doctorsImageContentStyle = {
-  textAlign: 'center',
-  color: 'white'
-}
-
-const doctorIconStyle = {
-  fontSize: '4rem',
-  marginBottom: '1rem'
-}
-
-const imageLabelStyle = {
-  fontSize: '1.5rem',
-  fontWeight: 'bold',
-  margin: '0 0 0.5rem 0',
-  color: 'white'
-}
-
-const imageSubLabelStyle = {
-  fontSize: '1rem',
-  opacity: 0.9,
-  margin: 0,
-  color: 'white'
-}
+// Export with media query support for CSS-in-JS libraries if needed
+export const responsiveStyles = `
+  @media (max-width: 768px) {
+    .doctor-intro-content {
+      grid-template-columns: 1fr !important;
+      text-align: center;
+      gap: 2rem;
+    }
+    
+    .doctor-intro-image {
+      order: 1;
+      margin-bottom: 1rem;
+    }
+    
+    .doctor-intro-text {
+      order: 2;
+    }
+    
+    .credential-item {
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .doctor-intro-content {
+      gap: 1.5rem;
+    }
+    
+    .credential-item {
+      padding: 0.8rem;
+    }
+  }
+`

@@ -1,23 +1,65 @@
+// components/Services.js
 export default function Services() {
+  const services = [
+    {
+      icon: '🚑',
+      title: 'Emergency Care',
+      description: '24/7 emergency medical services with rapid response team',
+      features: ['Trauma Center', 'Critical Care', 'Emergency Surgery']
+    },
+    {
+      icon: '🔬',
+      title: 'Laboratory Services',
+      description: 'Comprehensive diagnostic testing with quick results',
+      features: ['Blood Tests', 'Imaging', 'Pathology']
+    },
+    {
+      icon: '💊',
+      title: 'Pharmacy',
+      description: 'Full-service pharmacy with prescription management',
+      features: ['Medication Counseling', 'Insurance Billing', 'Home Delivery']
+    },
+    {
+      icon: '👨‍⚕️',
+      title: 'Specialist Consultations',
+      description: 'Expert consultations across multiple medical specialties',
+      features: ['Cardiology', 'Neurology', 'Orthopedics']
+    },
+    {
+      icon: '🏥',
+      title: 'Inpatient Care',
+      description: 'Comfortable patient rooms with comprehensive care',
+      features: ['Private Rooms', 'Nursing Care', 'Recovery Programs']
+    },
+    {
+      icon: '🩺',
+      title: 'Preventive Care',
+      description: 'Regular health screenings and preventive medicine',
+      features: ['Health Checkups', 'Vaccinations', 'Health Education']
+    }
+  ]
+
   return (
-    <section id="services" style={servicesStyle}>
+    <section style={servicesStyle}>
       <div className="container">
-        <h2 style={sectionTitleStyle}>Our Medical Services</h2>
-        <p style={sectionDescStyle}>
-          Comprehensive healthcare services delivered by our team of experienced professionals
-        </p>
+        <div style={servicesHeaderStyle}>
+          <h2 style={servicesTitleStyle}>Our Medical Services</h2>
+          <p style={servicesSubtitleStyle}>
+            Comprehensive healthcare services designed to meet all your medical needs
+          </p>
+        </div>
         
-        <div className="grid grid-3" style={{marginTop: '3rem'}}>
+        <div className="grid grid-3" style={servicesGridStyle}>
           {services.map((service, index) => (
             <div key={index} className="card" style={serviceCardStyle}>
-              <div style={serviceIconStyle}>
-                {service.icon}
-              </div>
+              <div style={serviceIconStyle}>{service.icon}</div>
               <h3 style={serviceTitleStyle}>{service.title}</h3>
               <p style={serviceDescStyle}>{service.description}</p>
-              <ul style={serviceListStyle}>
-                {service.features.map((feature, idx) => (
-                  <li key={idx} style={serviceItemStyle}>✓ {feature}</li>
+              <ul style={serviceFeaturesList}>
+                {service.features.map((feature, featureIndex) => (
+                  <li key={featureIndex} style={serviceFeatureItem}>
+                    ✓ {feature}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -28,83 +70,69 @@ export default function Services() {
   )
 }
 
-const services = [
-  {
-    icon: '🩺',
-    title: 'General Medicine',
-    description: 'Comprehensive primary healthcare for all ages',
-    features: ['Health checkups', 'Preventive care', 'Chronic disease management', 'Vaccinations']
-  },
-  {
-    icon: '🏥',
-    title: 'Emergency Care',
-    description: '24/7 emergency medical services',
-    features: ['Trauma care', 'Critical care']
-  },
-  {
-    icon: '🔬',
-    title: 'Diagnostics',
-    description: 'Advanced diagnostic and imaging services',
-    features: ['Laboratory tests']
-  },
-  {
-    icon: '💊',
-    title: 'Pharmacy',
-    description: 'In-house pharmacy with quality medications',
-    features: ['Prescription drugs', 'Over-the-counter medications', 'Medical supplies']
-  }
-]
-
 // Styles
-
 const servicesStyle = {
   padding: '5rem 0',
-  background: 'white'
+  background: '#f8f9fa'
 }
 
-const sectionTitleStyle = {
+const servicesHeaderStyle = {
+  textAlign: 'center',
+  marginBottom: '4rem'
+}
+
+const servicesTitleStyle = {
   fontSize: '2.5rem',
-  textAlign: 'center',
+  color: '#2c3e50',
   marginBottom: '1rem',
-  color: '#333'
+  fontWeight: 'bold'
 }
 
-const sectionDescStyle = {
+const servicesSubtitleStyle = {
   fontSize: '1.2rem',
-  textAlign: 'center',
-  color: '#666',
+  color: '#6c757d',
   maxWidth: '600px',
   margin: '0 auto'
 }
 
+const servicesGridStyle = {
+  gap: '2rem'
+}
+
 const serviceCardStyle = {
   textAlign: 'center',
-  height: '100%'
+  padding: '2.5rem',
+  height: '100%',
+  border: '2px solid transparent',
+  transition: 'all 0.3s ease'
 }
 
 const serviceIconStyle = {
   fontSize: '3rem',
-  marginBottom: '1rem'
-}
-
-const serviceDescStyle = {
-  color: '#666',
   marginBottom: '1.5rem'
-}
-
-const serviceListStyle = {
-  listStyle: 'none',
-  padding: 0,
-  textAlign: 'left'
-}
-
-const serviceItemStyle = {
-  padding: '5px 0',
-  color: '#28a745'
 }
 
 const serviceTitleStyle = {
   fontSize: '1.5rem',
+  color: '#2c3e50',
   marginBottom: '1rem',
-  color: '#333'
+  fontWeight: 'bold'
+}
+
+const serviceDescStyle = {
+  color: '#6c757d',
+  marginBottom: '1.5rem',
+  lineHeight: '1.6'
+}
+
+const serviceFeaturesList = {
+  listStyle: 'none',
+  padding: 0,
+  margin: 0
+}
+
+const serviceFeatureItem = {
+  color: '#28a745',
+  marginBottom: '0.5rem',
+  fontWeight: '500'
 }

@@ -22,6 +22,7 @@ export async function initDB() {
         doctor TEXT,
         reason TEXT,
         status TEXT DEFAULT 'scheduled',
+        user_id TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `)

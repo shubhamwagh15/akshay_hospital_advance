@@ -1,22 +1,24 @@
+// app/layout.js
+import { Inter } from 'next/font/google'
 import './globals.css'
+import { AuthProvider } from '../contexts/AuthContext'
 import Navbar from '../components/Navbar'
-import { initDB } from '../lib/database'
 
-// Initialize database on app start
-initDB()
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Akshay Hospital',
-  description: 'Your trusted healthcare partner',
+  title: 'HealthCare Plus - Hospital Management',
+  description: 'Secure hospital management system with role-based dashboard access',
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <Navbar />
-        <main>{children}</main>
-        
+      <body className={inter.className}>
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
